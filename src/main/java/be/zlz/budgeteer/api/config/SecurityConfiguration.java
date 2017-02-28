@@ -10,6 +10,8 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.addFilterAfter(new JWTFilter(), BasicAuthenticationFilter.class).antMatcher("/api/**");
+        http.addFilterBefore(new JWTFilter(), BasicAuthenticationFilter.class).antMatcher("/**")
+        .csrf()
+        .disable();
     }
 }
