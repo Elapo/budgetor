@@ -2,6 +2,7 @@ package be.zlz.budgeteer.api.domain;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Account {
@@ -12,11 +13,20 @@ public class Account {
 
     private long currentValue;
 
+    @OneToMany
+    List<Transaction> transactions;
+
     public Account() {
+
     }
 
     public Account(long currentValue) {
         this.currentValue = currentValue;
+        transactions = new ArrayList<Transaction>();
+    }
+
+    public List<Transaction> getTransactions() {
+        return transactions;
     }
 
     public long getId() {
