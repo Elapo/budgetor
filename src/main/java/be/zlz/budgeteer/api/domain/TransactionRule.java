@@ -1,27 +1,55 @@
 package be.zlz.budgeteer.api.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.OneToOne;
-
-enum Type{
-    PERCENTUAL_INCOME,
-    FLAT_INCOME,
-    PERCENTUAL_PAYMENT,
-    FLAT_PAYMENT,
-}
+import javax.persistence.*;
 
 @Entity
 public class TransactionRule {
 
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private Type type;
+    private TransactionType type;
 
     private int amount;
 
     @OneToOne
-    private SavingsAccount from;
+    private Account from;
+
+    public TransactionRule() {
+    }
+
+    public TransactionRule(TransactionType type, int amount, Account from) {
+        this.type = type;
+        this.amount = amount;
+        this.from = from;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public TransactionType getType() {
+        return type;
+    }
+
+    public void setType(TransactionType type) {
+        this.type = type;
+    }
+
+    public int getAmount() {
+        return amount;
+    }
+
+    public void setAmount(int amount) {
+        this.amount = amount;
+    }
+
+    public Account getFrom() {
+        return from;
+    }
+
+    public void setFrom(Account from) {
+        this.from = from;
+    }
 }
