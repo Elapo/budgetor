@@ -70,7 +70,7 @@ public class AuthService implements BeanFactoryAware {
         }
         catch (Exception sqle){
             logger.error("User save failed!", sqle);
-            return createExceptionJSON("A user with this email adress already exists", -1);
+            return createExceptionJSON("A user with this email address already exists", -1);
         }
 
         String token = createJwt(user);
