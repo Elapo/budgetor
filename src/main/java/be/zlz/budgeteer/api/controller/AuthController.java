@@ -7,22 +7,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-/**
- * Created by Frederik on 28/02/2017.
- */
-
 @RestController
 public class AuthController {
 
     @RequestMapping(value = "/register", method = RequestMethod.POST,
             headers = {"content-type=application/json"})
-    public String registerUser(@RequestBody User user){
+    public String registerUser(@RequestBody User user) {
         return user.getFirstName() + " " + user.getLastName();
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST,
             headers = {"content-type=application/json"})
-    public String loginUser(@RequestBody LoginWrapper loginWrapper){
+    public String loginUser(@RequestBody LoginWrapper loginWrapper) {
         return loginWrapper.getEmail() + " " + loginWrapper.getPassword();
     }
 }

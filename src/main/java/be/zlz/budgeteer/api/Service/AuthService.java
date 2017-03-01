@@ -11,20 +11,25 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.log4j.Logger;
 import org.mindrot.jbcrypt.BCrypt;
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.BeanFactoryAware;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jms.core.JmsTemplate;
+import org.springframework.stereotype.Service;
 
 import java.io.UnsupportedEncodingException;
 
-/**
- * Created by Frederik on 28/02/2017.
- */
-public class AuthService {
+@Service
+public class AuthService implements BeanFactoryAware {
 
     private final UserRepository userRepository;
 
     private ObjectMapper mapper;
 
     private final Logger logger;
+
+    private BeanFactory beanFactory;
 
     private static final String JWT_SECRET = "secret"; //todo move to config
 
@@ -33,6 +38,11 @@ public class AuthService {
         this.userRepository = userRepository;
         this.mapper = new ObjectMapper();
         this.logger = Logger.getLogger(this.getClass());
+    }
+
+    @Override
+    public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
+        this.beanFactory = beanFactory;
     }
 
     public String LoginUser(LoginWrapper loginWrapper) {
@@ -55,6 +65,8 @@ public class AuthService {
             logger.error("Error creating JWT", e);
             return createExceptionJSON("Error creating JWT", -1);
         }
+        JmsTemplate jmsTemplate = beanFactory.getBean(JmsTemplate.class);
+        jmsTemplate.convertAndSend("mail", "HELLO WORLD.");
         return token;
     }
 
@@ -62,8 +74,7 @@ public class AuthService {
     private String createExceptionJSON(String mess, int code) {
         try {
             return mapper.writeValueAsString(new ExceptionWrapper(mess, code));
-        }
-        catch (JsonProcessingException jpe) {
+        } catch (JsonProcessingException jpe) {
             logger.error("Error while creating JSON for Exception:", jpe);
             return "";
         }
