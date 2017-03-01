@@ -1,6 +1,7 @@
 package be.zlz.budgeteer.api.domain;
 
 import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -13,13 +14,18 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @NotBlank
     private String firstName;
 
+    @NotBlank
     private String lastName;
 
     @Email
+    @Column(unique = true)
+    @NotBlank
     private String emailAddress;
 
+    @NotBlank
     private String passwordHash;
 
     @OneToMany

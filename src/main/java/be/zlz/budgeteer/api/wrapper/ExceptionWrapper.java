@@ -4,11 +4,11 @@ package be.zlz.budgeteer.api.wrapper;
  * Created by Frederik on 28/02/2017.
  */
 public class ExceptionWrapper {
-    private String message;
+    private String error;
     private int code;
 
     public ExceptionWrapper(String message, int code) {
-        this.message = message;
+        this.error = message;
         this.code = code;
     }
 
@@ -20,11 +20,11 @@ public class ExceptionWrapper {
         this.code = code;
     }
 
-    public String getMessage() {
-        return message;
+    public String getError() {
+        return error;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setError(String error) {
+        this.error = error;
     }
 }

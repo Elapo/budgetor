@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
 
+import javax.validation.ConstraintViolationException;
 import java.io.UnsupportedEncodingException;
 
 @Service
@@ -46,27 +47,53 @@ public class AuthService implements BeanFactoryAware {
     }
 
     public String LoginUser(LoginWrapper loginWrapper) {
-        return "";
+        String token = "";
+        User u = userRepository.findUserByEmailAddress(loginWrapper.getEmail());
+        if(BCrypt.checkpw(loginWrapper.getPassword(), u.getPasswordHash())){
+            token = createJwt(u);
+        }
+        else{
+            token= createExceptionJSON("Wrong username or password", -1);
+        }
+        return token;
     }
 
     public String RegisterUser(User user) {
         user.setPasswordHash(BCrypt.hashpw(user.getPasswordHash(), BCrypt.gensalt()));
-        userRepository.save(user);
+
+        try{
+            userRepository.save(user);
+        }
+        catch (ConstraintViolationException cve){
+            logger.error("Validation failed", cve);
+            return createExceptionJSON("Please check if everything is filled in correctly.", -1);
+        }
+        catch (Exception sqle){
+            logger.error("User save failed!", sqle);
+            return createExceptionJSON("A user with this email adress already exists", -1);
+        }
+
+        String token = createJwt(user);
+
+        JmsTemplate jmsTemplate = beanFactory.getBean(JmsTemplate.class);
+        jmsTemplate.convertAndSend("mail", "HELLO WORLD.");
+        return token;
+    }
+
+    private String createJwt(User u){
         //make jwt
         String token;
         try {
             token = JWT.create()
                     .withIssuer("budgeteer")
-                    .withClaim("email", user.getEmailAddress())
-                    .withClaim("firstName", user.getFirstName())
-                    .withClaim("lastName", user.getLastName())
+                    .withClaim("email", u.getEmailAddress())
+                    .withClaim("firstName", u.getFirstName())
+                    .withClaim("lastName", u.getLastName())
                     .sign(Algorithm.HMAC256(JWT_SECRET));
         } catch (JWTCreationException | UnsupportedEncodingException e) {
             logger.error("Error creating JWT", e);
             return createExceptionJSON("Error creating JWT", -1);
         }
-        JmsTemplate jmsTemplate = beanFactory.getBean(JmsTemplate.class);
-        jmsTemplate.convertAndSend("mail", "HELLO WORLD.");
         return token;
     }
 
