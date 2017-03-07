@@ -49,11 +49,10 @@ public class AuthService implements BeanFactoryAware {
     public String LoginUser(LoginWrapper loginWrapper) {
         String token = "";
         User u = userRepository.findUserByEmailAddress(loginWrapper.getEmail());
-        if(BCrypt.checkpw(loginWrapper.getPassword(), u.getPasswordHash())){
+        if (BCrypt.checkpw(loginWrapper.getPassword(), u.getPasswordHash())) {
             token = createJwt(u);
-        }
-        else{
-            token= createExceptionJSON("Wrong username or password", -1);
+        } else {
+            token = createExceptionJSON("Wrong username or password", -1);
         }
         return token;
     }
@@ -61,14 +60,12 @@ public class AuthService implements BeanFactoryAware {
     public String RegisterUser(User user) {
         user.setPasswordHash(BCrypt.hashpw(user.getPasswordHash(), BCrypt.gensalt()));
 
-        try{
+        try {
             userRepository.save(user);
-        }
-        catch (ConstraintViolationException cve){
+        } catch (ConstraintViolationException cve) {
             logger.error("Validation failed", cve);
             return createExceptionJSON("Please check if everything is filled in correctly.", -1);
-        }
-        catch (Exception sqle){
+        } catch (Exception sqle) {
             logger.error("User save failed!", sqle);
             return createExceptionJSON("A user with this email address already exists", -1);
         }
@@ -80,7 +77,7 @@ public class AuthService implements BeanFactoryAware {
         return token;
     }
 
-    private String createJwt(User u){
+    private String createJwt(User u) {
         //make jwt
         String token;
         try {
