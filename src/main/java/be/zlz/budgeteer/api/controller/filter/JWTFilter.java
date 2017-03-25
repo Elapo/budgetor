@@ -26,7 +26,6 @@ public class JWTFilter extends GenericFilterBean {
         res.reset();
 
         String token = ((HttpServletRequest) servletRequest).getHeader("Authorization");
-
         try {
             if(token == null) throw new MissingAuthorizationTokenException();
             JWTVerifier verifier = JWT.require(Algorithm.HMAC256("secret"))
@@ -34,14 +33,13 @@ public class JWTFilter extends GenericFilterBean {
                     .build();
             DecodedJWT jwt = verifier.verify(token);
             filterChain.doFilter(servletRequest, servletResponse);
+        } catch (MissingAuthorizationTokenException mate) {
+            res.sendError(HttpServletResponse.SC_UNAUTHORIZED, "No Authorization token was found in your request.");
         } catch (JWTVerificationException jve) {
             jve.printStackTrace();
 
             //send 401
             res.sendError(HttpServletResponse.SC_UNAUTHORIZED, "You are not authorized to access this content.");
-        } catch (MissingAuthorizationTokenException mate){
-            res.sendError(HttpServletResponse.SC_UNAUTHORIZED, "No Authorization token was found in your request.");
         }
-
     }
 }
