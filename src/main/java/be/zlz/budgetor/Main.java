@@ -29,7 +29,7 @@ public class Main {
     }
 
     @Bean
-    public MessageConverter JacksonJmsMessageConverter() {
+    public MessageConverter jacksonJmsMessageConverter() {
         MappingJackson2MessageConverter converter = new MappingJackson2MessageConverter();
         converter.setTargetType(MessageType.TEXT);
         converter.setTypeIdPropertyName("_type");

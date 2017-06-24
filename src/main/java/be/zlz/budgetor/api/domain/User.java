@@ -35,16 +35,16 @@ public class User {
     private List<SavingsAccount> savingsAccounts;
 
     public User() {
-        this.accounts = new ArrayList<Account>();
-        this.savingsAccounts = new ArrayList<SavingsAccount>();
+        this.accounts = new ArrayList<>();
+        this.savingsAccounts = new ArrayList<>();
     }
 
     public User(String firstName, String lastName, String emailAddress) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.emailAddress = emailAddress;
-        this.accounts = new ArrayList<Account>();
-        this.savingsAccounts = new ArrayList<SavingsAccount>();
+        this.accounts = new ArrayList<>();
+        this.savingsAccounts = new ArrayList<>();
     }
 
     public long getId() {

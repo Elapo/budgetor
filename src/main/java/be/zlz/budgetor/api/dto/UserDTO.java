@@ -1,4 +1,4 @@
-package be.zlz.budgetor.api.DTO;
+package be.zlz.budgetor.api.dto;
 
 import be.zlz.budgetor.api.domain.User;
 import org.hibernate.validator.constraints.Email;

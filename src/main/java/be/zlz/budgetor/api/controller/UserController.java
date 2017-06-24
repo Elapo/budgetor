@@ -1,7 +1,7 @@
 package be.zlz.budgetor.api.controller;
 
-import be.zlz.budgetor.api.DTO.UserDTO;
-import be.zlz.budgetor.api.Service.UserService;
+import be.zlz.budgetor.api.dto.UserDTO;
+import be.zlz.budgetor.api.service.UserService;
 import be.zlz.budgetor.api.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

@@ -1,4 +1,4 @@
-package be.zlz.budgetor.api.DTO;
+package be.zlz.budgetor.api.dto;
 
 /**
  * Created by Frederik on 28/02/2017.

@@ -32,7 +32,7 @@ public class Account {
 
     public Account(long currentValue) {
         this.currentValue = currentValue;
-        transactions = new ArrayList<Transaction>();
+        transactions = new ArrayList<>();
     }
 
     public List<Transaction> getTransactions() {

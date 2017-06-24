@@ -1,8 +1,7 @@
-package be.zlz.budgetor.api.Service;
+package be.zlz.budgetor.api.service;
 
 import be.zlz.budgetor.api.templates.MailTemplate;
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.mail.MailException;
 import org.springframework.mail.MailSender;
@@ -26,7 +25,7 @@ public class MailService {
 
     @JmsListener(destination = "mail", containerFactory = "messageFactory")
     public void getEmailMessages(String email) {
-        System.out.println("email = " + email);
+        logger.debug("email = " + email);
     }
 
     private void sendMail(String address, MailTemplate template){

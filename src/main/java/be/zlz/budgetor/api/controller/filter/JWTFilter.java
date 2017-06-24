@@ -23,17 +23,17 @@ import java.io.IOException;
 public class JWTFilter extends GenericFilterBean {
 
     private String jwtSecret;
-    private Logger logger;
+    private Logger LOG;
 
     public JWTFilter(String secret) {
         super();
         this.jwtSecret = secret;
-        logger = Logger.getLogger(JWTFilter.class);
+        LOG = Logger.getLogger(JWTFilter.class);
     }
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-        System.out.println("filtering");
+        LOG.debug("Filtering...");
 
         HttpServletResponse res = (HttpServletResponse) servletResponse;
         res.reset();

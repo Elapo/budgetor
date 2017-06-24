@@ -1,8 +1,8 @@
 package be.zlz.budgetor.api.controller;
 
-import be.zlz.budgetor.api.DTO.LoginDTO;
-import be.zlz.budgetor.api.DTO.UserDTO;
-import be.zlz.budgetor.api.Service.AuthService;
+import be.zlz.budgetor.api.dto.LoginDTO;
+import be.zlz.budgetor.api.dto.UserDTO;
+import be.zlz.budgetor.api.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,14 +22,13 @@ public class AuthController {
     @RequestMapping(value = "/register", method = RequestMethod.POST,
             headers = {"content-type=application/json"})
     public String registerUser(@RequestBody UserDTO user) {
-        return authService.RegisterUser(user);
-        //return user.getFirstName() + " " + user.getLastName();
+        return authService.registerUser(user);
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST,
             headers = {"content-type=application/json"})
     public String loginUser(@RequestBody LoginDTO loginDTO) {
-        return authService.LoginUser(loginDTO);
+        return authService.loginUser(loginDTO);
     }
 
     @RequestMapping(value = "/refresh", method = RequestMethod.POST)

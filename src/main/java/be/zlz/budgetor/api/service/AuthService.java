@@ -1,9 +1,9 @@
-package be.zlz.budgetor.api.Service;
+package be.zlz.budgetor.api.service;
 
-import be.zlz.budgetor.api.DTO.ExceptionWrapper;
-import be.zlz.budgetor.api.DTO.LoginDTO;
-import be.zlz.budgetor.api.DTO.UserDTO;
 import be.zlz.budgetor.api.domain.User;
+import be.zlz.budgetor.api.dto.ExceptionWrapper;
+import be.zlz.budgetor.api.dto.LoginDTO;
+import be.zlz.budgetor.api.dto.UserDTO;
 import be.zlz.budgetor.api.repository.UserRepository;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -12,7 +12,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.log4j.Logger;
 import org.mindrot.jbcrypt.BCrypt;
-import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,11 +44,11 @@ public class AuthService implements BeanFactoryAware {
     }
 
     @Override
-    public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
+    public void setBeanFactory(BeanFactory beanFactory) {
         this.beanFactory = beanFactory;
     }
 
-    public String LoginUser(LoginDTO loginDTO) {
+    public String loginUser(LoginDTO loginDTO) {
         String token = "";
         User u = userRepository.findUserByEmailAddress(loginDTO.getEmail());
 
@@ -62,7 +61,7 @@ public class AuthService implements BeanFactoryAware {
         return token;
     }
 
-    public String RegisterUser(UserDTO user) {
+    public String registerUser(UserDTO user) {
 
         User newUser = new User(user.getFirstName(), user.getLastName(), user.getEmailAddress());
         newUser.setPasswordHash(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
@@ -87,7 +86,6 @@ public class AuthService implements BeanFactoryAware {
     private String createJwt(User u) {
         //make jwt
         String token;
-        System.out.println("secret: " + jwtSecret);
         try {
             token = JWT.create()
                     .withIssuer("budgetor")
@@ -96,7 +94,7 @@ public class AuthService implements BeanFactoryAware {
                     .withClaim("lastName", u.getLastName())
                     .sign(Algorithm.HMAC256(jwtSecret));
         } catch (JWTCreationException | UnsupportedEncodingException e) {
-            //logger.error("Error creating JWT", e);
+            logger.error("Error creating JWT", e);
             return createExceptionJSON("Error creating JWT", -1);
         }
         return token;

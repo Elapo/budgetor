@@ -1,8 +1,7 @@
 package be.zlz.budgetor.api.controller;
 
-import be.zlz.budgetor.api.DTO.AccountDTO;
-import be.zlz.budgetor.api.Service.AccountService;
-import be.zlz.budgetor.api.domain.Account;
+import be.zlz.budgetor.api.dto.AccountDTO;
+import be.zlz.budgetor.api.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;

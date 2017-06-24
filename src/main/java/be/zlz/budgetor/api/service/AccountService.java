@@ -1,4 +1,4 @@
-package be.zlz.budgetor.api.Service;
+package be.zlz.budgetor.api.service;
 
 import be.zlz.budgetor.api.domain.Account;
 import be.zlz.budgetor.api.domain.User;

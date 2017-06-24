@@ -22,14 +22,14 @@ public class SavingsAccount {
     private List<TransactionRule> autoRules;
 
     public SavingsAccount() {
-        this.transactions = new ArrayList<Transaction>();
-        this.autoRules = new ArrayList<TransactionRule>();
+        this.transactions = new ArrayList<>();
+        this.autoRules = new ArrayList<>();
     }
 
     public SavingsAccount(long currentValue) {
         this.currentValue = currentValue;
-        this.transactions = new ArrayList<Transaction>();
-        this.autoRules = new ArrayList<TransactionRule>();
+        this.transactions = new ArrayList<>();
+        this.autoRules = new ArrayList<>();
     }
 
     public long getId() {
