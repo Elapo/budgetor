@@ -1,9 +1,9 @@
-package be.zlz.budgeteer.api.Service;
+package be.zlz.budgetor.api.Service;
 
-import be.zlz.budgeteer.api.domain.User;
-import be.zlz.budgeteer.api.repository.UserRepository;
-import be.zlz.budgeteer.api.wrapper.ExceptionWrapper;
-import be.zlz.budgeteer.api.wrapper.LoginWrapper;
+import be.zlz.budgetor.api.domain.User;
+import be.zlz.budgetor.api.repository.UserRepository;
+import be.zlz.budgetor.api.DTO.ExceptionWrapper;
+import be.zlz.budgetor.api.DTO.LoginDTO;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
@@ -46,10 +46,10 @@ public class AuthService implements BeanFactoryAware {
         this.beanFactory = beanFactory;
     }
 
-    public String LoginUser(LoginWrapper loginWrapper) {
+    public String LoginUser(LoginDTO loginDTO) {
         String token = "";
-        User u = userRepository.findUserByEmailAddress(loginWrapper.getEmail());
-        if (BCrypt.checkpw(loginWrapper.getPassword(), u.getPasswordHash())) {
+        User u = userRepository.findUserByEmailAddress(loginDTO.getEmail());
+        if (BCrypt.checkpw(loginDTO.getPassword(), u.getPasswordHash())) {
             token = createJwt(u);
         } else {
             token = createExceptionJSON("Wrong username or password", -1);
@@ -82,7 +82,7 @@ public class AuthService implements BeanFactoryAware {
         String token;
         try {
             token = JWT.create()
-                    .withIssuer("budgeteer")
+                    .withIssuer("budgetor")
                     .withClaim("email", u.getEmailAddress())
                     .withClaim("firstName", u.getFirstName())
                     .withClaim("lastName", u.getLastName())

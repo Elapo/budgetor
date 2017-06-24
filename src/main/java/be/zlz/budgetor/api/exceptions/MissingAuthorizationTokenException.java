@@ -1,4 +1,4 @@
-package be.zlz.budgeteer.api.exceptions;
+package be.zlz.budgetor.api.exceptions;
 
 public class MissingAuthorizationTokenException extends RuntimeException {
 }

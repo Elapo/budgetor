@@ -1,8 +1,8 @@
-package be.zlz.budgeteer.api.controller;
+package be.zlz.budgetor.api.controller;
 
-import be.zlz.budgeteer.api.Service.AuthService;
-import be.zlz.budgeteer.api.domain.User;
-import be.zlz.budgeteer.api.wrapper.LoginWrapper;
+import be.zlz.budgetor.api.Service.AuthService;
+import be.zlz.budgetor.api.domain.User;
+import be.zlz.budgetor.api.DTO.LoginDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,7 +28,7 @@ public class AuthController {
 
     @RequestMapping(value = "/login", method = RequestMethod.POST,
             headers = {"content-type=application/json"})
-    public String loginUser(@RequestBody LoginWrapper loginWrapper) {
-        return loginWrapper.getEmail() + " " + loginWrapper.getPassword();
+    public String loginUser(@RequestBody LoginDTO loginDTO) {
+        return loginDTO.getEmail() + " " + loginDTO.getPassword();
     }
 }

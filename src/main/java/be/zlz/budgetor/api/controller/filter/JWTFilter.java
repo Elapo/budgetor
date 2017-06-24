@@ -1,6 +1,6 @@
-package be.zlz.budgeteer.api.controller.filter;
+package be.zlz.budgetor.api.controller.filter;
 
-import be.zlz.budgeteer.api.exceptions.MissingAuthorizationTokenException;
+import be.zlz.budgetor.api.exceptions.MissingAuthorizationTokenException;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -29,7 +29,7 @@ public class JWTFilter extends GenericFilterBean {
         try {
             if(token == null) throw new MissingAuthorizationTokenException();
             JWTVerifier verifier = JWT.require(Algorithm.HMAC256("secret"))
-                    .withIssuer("budgeteer")
+                    .withIssuer("budgetor")
                     .build();
             DecodedJWT jwt = verifier.verify(token);
             filterChain.doFilter(servletRequest, servletResponse);

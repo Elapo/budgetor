@@ -1,6 +1,6 @@
-package be.zlz.budgeteer.api.config;
+package be.zlz.budgetor.api.config;
 
-import be.zlz.budgeteer.api.controller.filter.JWTFilter;
+import be.zlz.budgetor.api.controller.filter.JWTFilter;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;

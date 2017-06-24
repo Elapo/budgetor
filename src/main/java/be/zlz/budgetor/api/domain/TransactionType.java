@@ -1,4 +1,4 @@
-package be.zlz.budgeteer.api.domain;
+package be.zlz.budgetor.api.domain;
 
 enum TransactionType{
     PERCENTUAL_INCOME,

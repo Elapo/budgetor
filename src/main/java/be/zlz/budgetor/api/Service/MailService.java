@@ -1,4 +1,4 @@
-package be.zlz.budgeteer.api.Service;
+package be.zlz.budgetor.api.Service;
 
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Component;

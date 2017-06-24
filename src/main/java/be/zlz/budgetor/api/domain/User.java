@@ -1,4 +1,4 @@
-package be.zlz.budgeteer.api.domain;
+package be.zlz.budgetor.api.domain;
 
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;

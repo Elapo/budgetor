@@ -1,4 +1,4 @@
-package be.zlz.budgeteer.api.controller;
+package be.zlz.budgetor.api.controller;
 
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;

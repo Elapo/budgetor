@@ -1,11 +1,11 @@
-package be.zlz.budgeteer.api.wrapper;
+package be.zlz.budgetor.api.DTO;
 
 import org.hibernate.validator.constraints.Email;
 
 /**
  * Created by Frederik on 28/02/2017.
  */
-public class LoginWrapper {
+public class LoginDTO {
 
     @Email
     private String email;
