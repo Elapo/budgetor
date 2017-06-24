@@ -15,6 +15,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         web.ignoring().antMatchers("/login").antMatchers("/register");
     }
 
+    //todo use property value
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.addFilterBefore(new JWTFilter("secret"), BasicAuthenticationFilter.class).antMatcher("/api/**").csrf().disable();

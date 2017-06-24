@@ -10,6 +10,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.log4j.Logger;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
@@ -29,6 +30,8 @@ public class AuthService implements BeanFactoryAware {
 
     private ObjectMapper mapper;
 
+    private Logger logger;
+
     private BeanFactory beanFactory;
 
     @Value("${jwt.secret}")
@@ -38,6 +41,7 @@ public class AuthService implements BeanFactoryAware {
     public AuthService(UserRepository userRepository) {
         this.userRepository = userRepository;
         this.mapper = new ObjectMapper();
+        logger = Logger.getLogger(AuthService.class);
     }
 
     @Override
@@ -51,7 +55,7 @@ public class AuthService implements BeanFactoryAware {
 
         if (u != null && BCrypt.checkpw(loginDTO.getPassword(), u.getPasswordHash())) {
             token = createJwt(u);
-            //logger.info("Logging in " + loginDTO.getEmail());
+            logger.info("Logging in " + loginDTO.getEmail());
         } else {
             token = createExceptionJSON("Wrong username or password", -1);
         }
@@ -66,10 +70,10 @@ public class AuthService implements BeanFactoryAware {
         try {
             userRepository.save(newUser);
         } catch (ConstraintViolationException cve) {
-            //logger.error("Validation failed", cve);
+            logger.error("Validation failed", cve);
             return createExceptionJSON("Please check if everything is filled in correctly.", -1);
         } catch (Exception sqle) {
-            //logger.error("User save failed!", sqle);
+            logger.error("User save failed!", sqle);
             return createExceptionJSON("A user with this email address already exists", -1);
         }
 
@@ -103,7 +107,7 @@ public class AuthService implements BeanFactoryAware {
         try {
             return mapper.writeValueAsString(new ExceptionWrapper(mess, code));
         } catch (JsonProcessingException jpe) {
-            //logger.error("Error while creating JSON for Exception:", jpe);
+            logger.error("Error while creating JSON for Exception:", jpe);
             return "";
         }
     }

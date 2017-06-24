@@ -7,6 +7,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import org.apache.log4j.Logger;
 import org.springframework.web.filter.GenericFilterBean;
 
 import javax.servlet.FilterChain;
@@ -20,10 +21,12 @@ import java.io.IOException;
 public class JWTFilter extends GenericFilterBean {
 
     private String jwtSecret;
+    private Logger logger;
 
     public JWTFilter(String secret) {
         super();
         this.jwtSecret = secret;
+        logger = Logger.getLogger(JWTFilter.class);
     }
 
     @Override
@@ -47,11 +50,11 @@ public class JWTFilter extends GenericFilterBean {
         } catch (MissingAuthorizationTokenException mate) {
             res.sendError(HttpServletResponse.SC_UNAUTHORIZED, "No Authorization token was found in your request.");
         } catch (JWTDecodeException ex) {
-            ex.printStackTrace();
+            logger.error("Failed to decode JWT", ex);
 
             res.sendError(HttpServletResponse.SC_BAD_REQUEST, "The token you provided does not have the correct format.");
         } catch (JWTVerificationException jve) {
-            jve.printStackTrace();
+            logger.error("Unauthorized access", jve);
 
             //send 401
             res.sendError(HttpServletResponse.SC_UNAUTHORIZED, "You are not authorized to access this content.");
