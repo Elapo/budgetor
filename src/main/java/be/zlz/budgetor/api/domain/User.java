@@ -39,11 +39,10 @@ public class User {
         this.savingsAccounts = new ArrayList<SavingsAccount>();
     }
 
-    public User(String firstName, String lastName, String emailAddress, String passwordHash) {
+    public User(String firstName, String lastName, String emailAddress) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.emailAddress = emailAddress;
-        this.passwordHash = passwordHash;
         this.accounts = new ArrayList<Account>();
         this.savingsAccounts = new ArrayList<SavingsAccount>();
     }

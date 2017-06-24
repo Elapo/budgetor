@@ -4,6 +4,7 @@ import be.zlz.budgetor.api.exceptions.MissingAuthorizationTokenException;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import org.springframework.web.filter.GenericFilterBean;
@@ -18,6 +19,13 @@ import java.io.IOException;
 
 public class JWTFilter extends GenericFilterBean {
 
+    private String jwtSecret;
+
+    public JWTFilter(String secret) {
+        super();
+        this.jwtSecret = secret;
+    }
+
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         System.out.println("filtering");
@@ -27,19 +35,33 @@ public class JWTFilter extends GenericFilterBean {
 
         String token = ((HttpServletRequest) servletRequest).getHeader("Authorization");
         try {
-            if(token == null) throw new MissingAuthorizationTokenException();
-            JWTVerifier verifier = JWT.require(Algorithm.HMAC256("secret"))
+            if (token == null) throw new MissingAuthorizationTokenException();
+
+            token = extractJwt(token);
+
+            JWTVerifier verifier = JWT.require(Algorithm.HMAC256(jwtSecret))
                     .withIssuer("budgetor")
                     .build();
             DecodedJWT jwt = verifier.verify(token);
             filterChain.doFilter(servletRequest, servletResponse);
         } catch (MissingAuthorizationTokenException mate) {
             res.sendError(HttpServletResponse.SC_UNAUTHORIZED, "No Authorization token was found in your request.");
+        } catch (JWTDecodeException ex) {
+            ex.printStackTrace();
+
+            res.sendError(HttpServletResponse.SC_BAD_REQUEST, "The token you provided does not have the correct format.");
         } catch (JWTVerificationException jve) {
             jve.printStackTrace();
 
             //send 401
             res.sendError(HttpServletResponse.SC_UNAUTHORIZED, "You are not authorized to access this content.");
         }
+    }
+
+    private String extractJwt(String token) {
+        if (token.contains(" ")) {
+            token = token.split(" ")[1];
+        }
+        return token;
     }
 }

@@ -9,6 +9,7 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 
 @Configuration
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring().antMatchers("/login").antMatchers("/register");
@@ -16,6 +17,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.addFilterBefore(new JWTFilter(), BasicAuthenticationFilter.class).antMatcher("/api/**").csrf().disable();
+        http.addFilterBefore(new JWTFilter("secret"), BasicAuthenticationFilter.class).antMatcher("/api/**").csrf().disable();
     }
 }
