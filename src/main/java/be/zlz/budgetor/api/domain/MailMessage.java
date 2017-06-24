@@ -71,4 +71,16 @@ public class MailMessage {
     public void setSent(boolean sent) {
         this.sent = sent;
     }
+
+    @Override
+    public String toString() {
+        return "MailMessage{" +
+                "id=" + id +
+                ", dateToSend=" + dateToSend +
+                ", dateSent=" + dateSent +
+                ", sent=" + sent +
+                ", subject='" + subject + '\'' +
+                ", message='" + message + '\'' +
+                '}';
+    }
 }

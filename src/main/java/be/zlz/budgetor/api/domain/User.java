@@ -28,10 +28,10 @@ public class User {
     @NotBlank
     private String passwordHash;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.LAZY)
     private List<Account> accounts;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.LAZY)
     private List<SavingsAccount> savingsAccounts;
 
     public User() {
@@ -89,5 +89,15 @@ public class User {
 
     public void setPasswordHash(String passwordHash) {
         this.passwordHash = passwordHash;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", emailAddress='" + emailAddress + '\'' +
+                '}';
     }
 }

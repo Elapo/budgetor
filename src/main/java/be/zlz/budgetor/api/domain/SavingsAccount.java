@@ -11,13 +11,15 @@ public class SavingsAccount {
     @GeneratedValue
     private long id;
 
+    private String nickName;
+
     private long currentValue;
 
     @OneToMany
-    List<Transaction> transactions;
+    private List<Transaction> transactions;
 
     @OneToMany
-    List<TransactionRule> autoRules;
+    private List<TransactionRule> autoRules;
 
     public SavingsAccount() {
         this.transactions = new ArrayList<Transaction>();
@@ -48,5 +50,22 @@ public class SavingsAccount {
 
     public void setCurrentValue(long currentValue) {
         this.currentValue = currentValue;
+    }
+
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
+    }
+
+    @Override
+    public String toString() {
+        return "SavingsAccount{" +
+                "id=" + id +
+                ", nickName='" + nickName + '\'' +
+                ", currentValue=" + currentValue +
+                '}';
     }
 }

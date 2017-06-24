@@ -1,21 +1,30 @@
 package be.zlz.budgetor.api.controller;
 
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import be.zlz.budgetor.api.DTO.UserDTO;
+import be.zlz.budgetor.api.Service.UserService;
+import be.zlz.budgetor.api.domain.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
+
+    private UserService userService;
+
+    @Autowired
+    public UserController(UserService userService){
+        this.userService = userService;
+    }
 
     @RequestMapping(value = "", method = RequestMethod.GET)
     public String testThisApp() {
         return "Hello, World!";
     }
 
-    @RequestMapping("/{id}")
-    public String getUserById(@PathVariable String id) {
-        return id;
+    @GetMapping("/current")
+    public UserDTO getCurrentUser(){
+        User current = userService.getCurrentUser();
+        return new UserDTO(current);
     }
 }

@@ -8,6 +8,8 @@ import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import org.apache.log4j.Logger;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.GenericFilterBean;
 
 import javax.servlet.FilterChain;
@@ -46,6 +48,10 @@ public class JWTFilter extends GenericFilterBean {
                     .withIssuer("budgetor")
                     .build();
             DecodedJWT jwt = verifier.verify(token);
+
+            UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(jwt.getClaims(), null);
+            SecurityContextHolder.getContext().setAuthentication(auth);
+
             filterChain.doFilter(servletRequest, servletResponse);
         } catch (MissingAuthorizationTokenException mate) {
             res.sendError(HttpServletResponse.SC_UNAUTHORIZED, "No Authorization token was found in your request.");
@@ -59,6 +65,8 @@ public class JWTFilter extends GenericFilterBean {
             //send 401
             res.sendError(HttpServletResponse.SC_UNAUTHORIZED, "You are not authorized to access this content.");
         }
+
+
     }
 
     private String extractJwt(String token) {

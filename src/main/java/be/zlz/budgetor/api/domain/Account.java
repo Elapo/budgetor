@@ -1,8 +1,12 @@
 package be.zlz.budgetor.api.domain;
 
+import org.hibernate.validator.constraints.Length;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+
+import static javax.persistence.CascadeType.ALL;
 
 @Entity
 public class Account {
@@ -13,8 +17,14 @@ public class Account {
 
     private long currentValue;
 
+    @Length(max = 254)
+    private String nickName;
+
     @OneToMany
-    List<Transaction> transactions;
+    private List<Transaction> transactions;
+
+    @ManyToOne(cascade = ALL)
+    private User user;
 
     public Account() {
 
@@ -39,5 +49,22 @@ public class Account {
 
     public void setCurrentValue(long currentValue) {
         this.currentValue = currentValue;
+    }
+
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
+    }
+
+    @Override
+    public String toString() {
+        return "Account{" +
+                "id=" + id +
+                ", currentValue=" + currentValue +
+                ", nickName='" + nickName + '\'' +
+                '}';
     }
 }

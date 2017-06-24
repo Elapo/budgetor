@@ -52,4 +52,14 @@ public class TransactionRule {
     public void setFrom(Account from) {
         this.from = from;
     }
+
+    @Override
+    public String toString() {
+        return "TransactionRule{" +
+                "id=" + id +
+                ", type=" + type +
+                ", amount=" + amount +
+                ", from=" + from +
+                '}';
+    }
 }

@@ -1,5 +1,6 @@
 package be.zlz.budgetor.api.DTO;
 
+import be.zlz.budgetor.api.domain.User;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 
@@ -16,6 +17,16 @@ public class UserDTO {
 
     @NotBlank
     private String password;
+
+    public UserDTO(){
+
+    }
+
+    public UserDTO(User user) {
+        this.firstName = user.getFirstName();
+        this.lastName = user.getLastName();
+        this.emailAddress = user.getEmailAddress();
+    }
 
     public String getFirstName() {
         return firstName;
