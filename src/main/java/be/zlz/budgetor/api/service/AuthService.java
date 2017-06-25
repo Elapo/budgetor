@@ -48,6 +48,7 @@ public class AuthService implements BeanFactoryAware {
         this.beanFactory = beanFactory;
     }
 
+    //fixme test for timing attack
     public String loginUser(LoginDTO loginDTO) {
         String token = "";
         User u = userRepository.findUserByEmailAddress(loginDTO.getEmail());
