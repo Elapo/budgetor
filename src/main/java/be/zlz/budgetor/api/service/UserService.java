@@ -40,9 +40,12 @@ public class UserService {
     public User updateUser(UserDTO updated) {
         User current = getCurrentUser();
 
+        System.out.println("current = " + current);
+        System.out.println("updated = " + updated);
+
         if (current != null) {
             current.setEmailAddress(updated.getEmailAddress());
-            current.setFirstName(updated.getEmailAddress());
+            current.setFirstName(updated.getFirstName());
             current.setLastName(updated.getLastName());
             userRepository.save(current);
         }

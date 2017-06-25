@@ -34,12 +34,12 @@ public class UserController {
     }
 
     @PutMapping("/current")
-    public UserDTO updateCurrentUser(UserDTO updated) {
+    public UserDTO updateCurrentUser(@RequestBody UserDTO updated) {
         return new UserDTO(userService.updateUser(updated));
     }
 
     @PutMapping("/current/changepassword")
-    public String changePassword(PasswordDTO passwordDTO) {
+    public String changePassword(@RequestBody PasswordDTO passwordDTO) {
         return authService.loginUser(userService.changePassword(passwordDTO));
     }
 
