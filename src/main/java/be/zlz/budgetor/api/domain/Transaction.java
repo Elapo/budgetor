@@ -14,6 +14,12 @@ public class Transaction {
 
     private LocalDate timeStamp;
 
+    @ManyToOne
+    private TransactionRule createdBy;
+
+    @ManyToOne
+    private Account account;
+
     public Transaction() {
     }
 
@@ -40,6 +46,22 @@ public class Transaction {
 
     public void setTimeStamp(LocalDate timeStamp) {
         this.timeStamp = timeStamp;
+    }
+
+    public TransactionRule getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(TransactionRule createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
     }
 
     @Override

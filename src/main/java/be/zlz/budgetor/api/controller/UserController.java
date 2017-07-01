@@ -6,6 +6,7 @@ import be.zlz.budgetor.api.dto.UserDTO;
 import be.zlz.budgetor.api.service.AuthService;
 import be.zlz.budgetor.api.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -30,7 +31,10 @@ public class UserController {
     @GetMapping("/current")
     public UserDTO getCurrentUser() {
         User current = userService.getCurrentUser();
-        return new UserDTO(current);
+        if (current != null){
+            return new UserDTO(current);
+        }
+        throw new AccessDeniedException("You are not allowed to access this resource. Please log in first.");
     }
 
     @PutMapping("/current")

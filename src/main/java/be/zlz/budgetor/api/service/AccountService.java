@@ -8,8 +8,6 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 
@@ -23,31 +21,34 @@ public class AccountService {
     private Logger logger;
 
     @Autowired
-    public AccountService(AccountRepository repo, UserService service){
+    public AccountService(AccountRepository repo, UserService service) {
         accountRepository = repo;
         userService = service;
         logger = Logger.getLogger(AccountService.class);
     }
 
-    public @ResponseBody List<Account> getAllAccounts(){
+    public List<Account> getAllAccounts() {
         User current = userService.getCurrentUser();
         return accountRepository.findByUserId(current.getId());
     }
 
-    public Account upsertAccount(AccountDTO account){
+    public Account getAccountById(long id) {
+        return accountRepository.findOne(id);
+    }
+
+    public Account upsertAccount(AccountDTO account) {
         Account newAccount = new Account(account.getCurrentValue(), account.getNickName(), userService.getCurrentUser());
         accountRepository.save(newAccount);
         return newAccount;
     }
 
-    public void deleteAccount(long id){
-        Account account =accountRepository.findOne(id);
+    public void deleteAccount(long id) {
+        Account account = accountRepository.findOne(id);
         List<Account> userAccounts = accountRepository.findByUserId(userService.getCurrentUser().getId());
 
-        if(userAccounts.contains(account)){
+        if (userAccounts.contains(account)) {
             accountRepository.delete(id);
-        }
-        else {
+        } else {
             throw new AccessDeniedException("You are not the owner of this account");
         }
     }

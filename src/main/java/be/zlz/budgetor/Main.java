@@ -20,7 +20,6 @@ import javax.jms.ConnectionFactory;
 @EnableWebSecurity
 public class Main {
 
-    //todo implement proper logging
     @SuppressWarnings(value = "all")
     @Bean
     public JmsListenerContainerFactory<?> messageFactory(ConnectionFactory connectionFactory,

@@ -21,6 +21,9 @@ public class SavingsAccount {
     @OneToMany
     private List<TransactionRule> autoRules;
 
+    @ManyToOne
+    private User user;
+
     public SavingsAccount() {
         this.transactions = new ArrayList<>();
         this.autoRules = new ArrayList<>();
@@ -58,6 +61,14 @@ public class SavingsAccount {
 
     public void setNickName(String nickName) {
         this.nickName = nickName;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @Override

@@ -1,10 +1,13 @@
 package be.zlz.budgetor.api.repository;
 
 import be.zlz.budgetor.api.domain.MailMessage;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
-/**
- * Created by Frederik on 24/06/2017.
- */
+import java.util.List;
+
 public interface MailMessageRepository extends CrudRepository<MailMessage, Long> {
+
+    @Query("SELECT m from MailMessage m where m.sent=false")
+    List<MailMessage> findAllUnsent();
 }

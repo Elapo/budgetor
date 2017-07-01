@@ -23,8 +23,11 @@ public class Account {
     @OneToMany
     private List<Transaction> transactions;
 
-    @ManyToOne(cascade = ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     private User user;
+
+    @OneToMany
+    private List<TransactionRule> rules;
 
     public Account() {
 
@@ -63,6 +66,18 @@ public class Account {
 
     public void setNickName(String nickName) {
         this.nickName = nickName;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public List<TransactionRule> getRules() {
+        return rules;
     }
 
     @Override
