@@ -2,30 +2,44 @@ package be.zlz.budgetor.api.controller;
 
 import be.zlz.budgetor.api.dto.AccountDTO;
 import be.zlz.budgetor.api.service.AccountService;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@RequestMapping("/api/accounts")
 public class AccountController {
 
     private AccountService accountService;
+    private Logger logger;
 
     @Autowired
     public AccountController(AccountService service){
         accountService = service;
+        logger = Logger.getLogger(AccountController.class);
     }
 
-    @GetMapping("/accounts")
+    @GetMapping
     public List<AccountDTO> getAccounts(){
         List<AccountDTO> accounts = new ArrayList<>();
         accountService.getAllAccounts().forEach(account -> accounts.add(new AccountDTO(account)));
         return accounts;
     }
 
+    @PutMapping
+    public AccountDTO upsertAccount(@RequestBody AccountDTO account){
+        return new AccountDTO(accountService.upsertAccount(account));
+    }
 
+    @DeleteMapping("/{id}")
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
+    public void deleteAccount(@PathVariable int id){
+        logger.debug("Trying to delete account no." + id);
+        accountService.deleteAccount(id);
+    }
 
 }

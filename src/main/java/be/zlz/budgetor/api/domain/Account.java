@@ -30,6 +30,12 @@ public class Account {
 
     }
 
+    public Account(long currentValue, String nickName, User user) {
+        this.currentValue = currentValue;
+        this.nickName = nickName;
+        this.user = user;
+    }
+
     public Account(long currentValue) {
         this.currentValue = currentValue;
         transactions = new ArrayList<>();

@@ -2,10 +2,14 @@ package be.zlz.budgetor.api.service;
 
 import be.zlz.budgetor.api.domain.Account;
 import be.zlz.budgetor.api.domain.User;
+import be.zlz.budgetor.api.dto.AccountDTO;
 import be.zlz.budgetor.api.repository.AccountRepository;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 
@@ -25,12 +29,27 @@ public class AccountService {
         logger = Logger.getLogger(AccountService.class);
     }
 
-    public List<Account> getAllAccounts(){
+    public @ResponseBody List<Account> getAllAccounts(){
         User current = userService.getCurrentUser();
         return accountRepository.findByUserId(current.getId());
     }
 
-    public Account createAccount(){
-        return null;
+    public Account upsertAccount(AccountDTO account){
+        Account newAccount = new Account(account.getCurrentValue(), account.getNickName(), userService.getCurrentUser());
+        accountRepository.save(newAccount);
+        return newAccount;
     }
+
+    public void deleteAccount(long id){
+        Account account =accountRepository.findOne(id);
+        List<Account> userAccounts = accountRepository.findByUserId(userService.getCurrentUser().getId());
+
+        if(userAccounts.contains(account)){
+            accountRepository.delete(id);
+        }
+        else {
+            throw new AccessDeniedException("You are not the owner of this account");
+        }
+    }
+
 }
