@@ -4,6 +4,7 @@ import be.zlz.budgetor.api.domain.User;
 import be.zlz.budgetor.api.dto.ExceptionWrapper;
 import be.zlz.budgetor.api.dto.LoginDTO;
 import be.zlz.budgetor.api.dto.UserDTO;
+import be.zlz.budgetor.api.exceptions.BadCredentialsException;
 import be.zlz.budgetor.api.repository.UserRepository;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -19,6 +20,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
 
+import javax.security.auth.login.LoginException;
 import javax.validation.ConstraintViolationException;
 import java.io.UnsupportedEncodingException;
 
@@ -57,7 +59,7 @@ public class AuthService implements BeanFactoryAware {
             token = createJwt(u);
             logger.info("Logging in " + loginDTO.getEmail());
         } else {
-            token = createExceptionJSON("Wrong username or password", -1);
+            throw new BadCredentialsException("Wrong username or password");
         }
         return token;
     }
@@ -67,15 +69,7 @@ public class AuthService implements BeanFactoryAware {
         User newUser = new User(user.getFirstName(), user.getLastName(), user.getEmailAddress());
         newUser.setPasswordHash(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
 
-        try {
-            userRepository.save(newUser);
-        } catch (ConstraintViolationException cve) {
-            logger.error("Validation failed", cve);
-            return createExceptionJSON("Please check if everything is filled in correctly.", -1);
-        } catch (Exception sqle) {
-            logger.error("User save failed!", sqle);
-            return createExceptionJSON("A user with this email address already exists", -1);
-        }
+        userRepository.save(newUser);
 
         String token = createJwt(newUser);
 
@@ -90,6 +84,7 @@ public class AuthService implements BeanFactoryAware {
         try {
             token = JWT.create()
                     .withIssuer("budgetor")
+                    .withClaim("id", Long.toString(u.getId()))
                     .withClaim("email", u.getEmailAddress())
                     .withClaim("firstName", u.getFirstName())
                     .withClaim("lastName", u.getLastName())

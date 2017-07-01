@@ -43,14 +43,19 @@ public class AccountService {
     }
 
     public void deleteAccount(long id) {
-        Account account = accountRepository.findOne(id);
-        List<Account> userAccounts = accountRepository.findByUserId(userService.getCurrentUser().getId());
-
-        if (userAccounts.contains(account)) {
+        if(isCurrentOwnerOf(id)){
             accountRepository.delete(id);
-        } else {
+        }
+        else {
             throw new AccessDeniedException("You are not the owner of this account");
         }
+
+    }
+
+    public boolean isCurrentOwnerOf(long id){
+        Account account = accountRepository.findOne(id);
+        List<Account> userAccounts = accountRepository.findByUserId(userService.getCurrentUser().getId());
+        return userAccounts.contains(account);
     }
 
 }

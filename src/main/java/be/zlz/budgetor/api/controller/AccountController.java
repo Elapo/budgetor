@@ -53,4 +53,15 @@ public class AccountController {
         return transactionService.getTransactionsForAccount(id);
     }
 
+    @PutMapping("/{id}/transactions")
+    public TransactionDTO upsertTransaction(@PathVariable int accId,@RequestBody TransactionDTO transaction){
+        return transactionService.upsertTransaction(transaction);
+    }
+
+    @DeleteMapping("/{id}/transactions/{id}")
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
+    public void deleteTransaction(@PathVariable int accId, @PathVariable int transId){
+        transactionService.deleteTransaction(accId, transId);
+    }
+
 }
