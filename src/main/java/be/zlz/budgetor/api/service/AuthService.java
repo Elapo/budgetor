@@ -81,8 +81,15 @@ public class AuthService implements BeanFactoryAware {
     }
 
     public String refreshJwt(String token) {
+
+        if(token == null || token.isEmpty()){
+            //todo change to ex
+            return token;
+        }
+
         Date expiration = JWT.decode(token).getExpiresAt();
-        long userId = Long.getLong(JWT.decode(token).getClaim("id").asString());
+
+        Long userId = new Long(JWT.decode(token).getClaim("id").asString());
 
         LocalDateTime ldt = expiration.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
         LocalDateTime now = LocalDateTime.now();
