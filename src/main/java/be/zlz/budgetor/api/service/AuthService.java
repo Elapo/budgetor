@@ -21,11 +21,10 @@ import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
 
 import java.io.UnsupportedEncodingException;
-import java.time.Period;
-import java.util.Date;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
+import java.util.Date;
 
 @Service
 public class AuthService implements BeanFactoryAware {
@@ -88,13 +87,11 @@ public class AuthService implements BeanFactoryAware {
         LocalDateTime ldt = expiration.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
         LocalDateTime now = LocalDateTime.now();
 
-        if(ldt.isAfter(now)){
+        if (ldt.isAfter(now)) {
             return token;
-        }
-        else if(now.plus(30, ChronoUnit.MINUTES).isAfter(ldt)){
+        } else if (now.plus(30, ChronoUnit.MINUTES).isAfter(ldt)) {
             return createJwt(userRepository.findOne(userId));
-        }
-        else {
+        } else {
             throw new BadCredentialsException("Your token has expired, please log in again");
         }
     }
@@ -114,6 +111,16 @@ public class AuthService implements BeanFactoryAware {
                                     .plus(1, ChronoUnit.DAYS)
                                     .atZone(ZoneId.systemDefault())
                                     .toInstant()))
+                    .withIssuedAt(Date.from(
+                            LocalDateTime.now()
+                                    .atZone(ZoneId.systemDefault())
+                                    .toInstant()
+                    ))
+                    .withNotBefore(Date.from(
+                            LocalDateTime.now()
+                                    .atZone(ZoneId.systemDefault())
+                                    .toInstant()
+                    ))
                     .sign(Algorithm.HMAC256(jwtSecret));
         } catch (JWTCreationException | UnsupportedEncodingException e) {
             logger.error("Error creating JWT", e);

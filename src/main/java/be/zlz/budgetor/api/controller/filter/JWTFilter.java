@@ -46,6 +46,7 @@ public class JWTFilter extends GenericFilterBean {
 
             JWTVerifier verifier = JWT.require(Algorithm.HMAC256(jwtSecret))
                     .withIssuer("budgetor")
+                    .acceptExpiresAt(5*60)
                     .build();
             DecodedJWT jwt = verifier.verify(token);
 
