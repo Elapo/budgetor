@@ -20,9 +20,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
 
-import javax.security.auth.login.LoginException;
-import javax.validation.ConstraintViolationException;
 import java.io.UnsupportedEncodingException;
+import java.time.Period;
+import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 
 @Service
 public class AuthService implements BeanFactoryAware {
@@ -78,6 +81,24 @@ public class AuthService implements BeanFactoryAware {
         return token;
     }
 
+    public String refreshJwt(String token) {
+        Date expiration = JWT.decode(token).getExpiresAt();
+        long userId = Long.getLong(JWT.decode(token).getClaim("id").asString());
+
+        LocalDateTime ldt = expiration.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+        LocalDateTime now = LocalDateTime.now();
+
+        if(ldt.isAfter(now)){
+            return token;
+        }
+        else if(now.plus(30, ChronoUnit.MINUTES).isAfter(ldt)){
+            return createJwt(userRepository.findOne(userId));
+        }
+        else {
+            throw new BadCredentialsException("Your token has expired, please log in again");
+        }
+    }
+
     private String createJwt(User u) {
         //make jwt
         String token;
@@ -88,6 +109,11 @@ public class AuthService implements BeanFactoryAware {
                     .withClaim("email", u.getEmailAddress())
                     .withClaim("firstName", u.getFirstName())
                     .withClaim("lastName", u.getLastName())
+                    .withExpiresAt(Date.from(
+                            LocalDateTime.now()
+                                    .plus(1, ChronoUnit.DAYS)
+                                    .atZone(ZoneId.systemDefault())
+                                    .toInstant()))
                     .sign(Algorithm.HMAC256(jwtSecret));
         } catch (JWTCreationException | UnsupportedEncodingException e) {
             logger.error("Error creating JWT", e);

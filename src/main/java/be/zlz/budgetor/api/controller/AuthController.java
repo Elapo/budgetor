@@ -33,6 +33,6 @@ public class AuthController {
 
     @RequestMapping(value = "/refresh", method = RequestMethod.POST)
     public String refreshToken(@RequestBody String token) {
-        return "NYI";
+        return authService.refreshJwt(token);
     }
 }
